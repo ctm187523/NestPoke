@@ -1,0 +1,14 @@
+#para correr el contenedor -> docker-compose up -d
+#el contenedor se llamara pokedex ya que toma el nombre de la carpeta del proyecto
+version: '3'
+
+services:
+    db:
+      image: mongo:5      #descargamos la imagen de mongo5
+      restart: always
+      ports:
+        - 27017:27017   #enlazamos el puerto de mi ordenador con el puerto que trabaja mongo
+      environment:       #variables de entorno
+         MONGODB_DATABASE: nest-pokemon  #nombre de la base de datos
+      volumes:          #creamos un volumen para que la base de datos sea persistente
+        - ./mongo:/data/db #se crea un carpeta llamada mongo en el proyecto enlazada con la imagen que estamos montando en el contenedor
