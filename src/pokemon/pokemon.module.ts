@@ -18,6 +18,10 @@ import { Pokemon, PokemonSchema } from './entities/pokemon.entity';
         schema: PokemonSchema, //PokemonSchema es el esquema creado al final en pokemon.entity.ts
       }
     ])
+  ],
+  //exportamos para que pueda ser consumido en otro módulo lo usamos en seed.service.ts
+  exports: [
+    MongooseModule  //exportamos el módulo, seria nuestro pokemon module
   ]
 })
 export class PokemonModule {}
