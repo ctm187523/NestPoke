@@ -18,7 +18,12 @@ async function bootstrap() {
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true, //whitelist solo deja pasar la data que esperamos y hay informacion adicional la descarta, pero no marca error por recibir informacion que no toca
-      forbidNonWhitelisted: true, }) //forbidNonWhitelisted da error si se manda informacion que no toca
+      forbidNonWhitelisted: true, 
+      transform: true,    //con transform y transformOptions hacemos que haga conversiones, los quuery parameteres son siempre strings y en common/dto los queremos como number, hace la conversion automaticamente
+      transformOptions:{
+        enableImplicitConversion: true
+      }
+    }) //forbidNonWhitelisted da error si se manda informacion que no toca
   );
   
   //puerto por donde escuha la app

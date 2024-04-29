@@ -55,7 +55,7 @@ export class SeedService {
       //const pokemon = await this.pokemonModel.create( { name, no } )
       
       //llamamos al array creado arriba y le damos la definicion de los pokemos que queremos insertar(name,no)
-      pokemonToInsert.push( { name, no} );
+      pokemonToInsert.push( { name, no } );
       
       //console.log({ name, no })
     });
@@ -63,7 +63,7 @@ export class SeedService {
    //insertamos los pokemons
    await this.pokemonModel.insertMany(pokemonToInsert)
     
-    return 'Seed executed'; //de la data nos interesa los results
+    return 'Seed executed'; 
   }
 }
  

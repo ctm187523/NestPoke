@@ -4,6 +4,7 @@ import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { Model, isValidObjectId } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';  //creado por Nest para manejar mongoose
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class PokemonService {
@@ -33,8 +34,22 @@ export class PokemonService {
 
   }
 
-  findAll() {
-    return `This action returns all pokemon`;
+  //mostramos los pokemons con paginacion recibimos un objeto de tipo PaginationDto
+  //que contiene los query parameters validados
+  findAll( paginationDto: PaginationDto) {
+
+    //desestructuramos  las propiedades de paginationDto 
+    //que contienen los query parameters como son opcionales
+    //si no vienen por defecto ponemos el limit en 10 y offset en 0
+    const { limit = 10, offset = 0} = paginationDto;
+
+    return this.pokemonModel.find()
+        .limit( limit ) //metodo de Find para poner el limite de los pokemons a mostrar, paginacion
+        .skip( offset ) //skip salta a los siguientes pokemons
+        .sort({
+          no: 1      //ordenamos la columna no de manera ascendente
+        })
+        .select( '-__v' )   //en el select como tiene el guión menos decimos que no muestre la version __v que muestra por defecto 
   }
 
   //el parametro termino de busqueda puede ser el MongoId, el name o el no

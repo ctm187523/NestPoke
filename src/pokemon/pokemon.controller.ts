@@ -1,8 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Query } from '@nestjs/common';
 import { PokemonService } from './pokemon.service';
 import { CreatePokemonDto } from './dto/create-pokemon.dto';
 import { UpdatePokemonDto } from './dto/update-pokemon.dto';
 import { ParseMongoIdPipe } from 'src/common/pipes/parse-mongo-id.pipe';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('pokemon')
 export class PokemonController {
@@ -15,8 +16,10 @@ export class PokemonController {
   }
 
   @Get()
-  findAll() {
-    return this.pokemonService.findAll();
+  findAll( @Query() paginationDto: PaginationDto) {   //con @Query obtenemos los queryparameters de la url(van seguidos del ?), vienen siempre como string, tipamos los Query parameteres recibidos con un DTO PaginationDto creado en common/dto, para manejar las validaciones
+    console.log({paginationDto});
+    
+    return this.pokemonService.findAll( paginationDto ); //mandamos como parametro el paginationDto recibido, los query parameters del url
   }
 
   @Get(':terminoBusqueda') //accedemos al valor de la url que viene despues de pokemon ej:localhost:3000/api/v2/pokemon/1, o si es por name -> localhost:3000/api/v2/pokemon/charmander o por MongoId -> localhost:3000/api/v2/pokemon/66193b15430104fbd3280dc9
