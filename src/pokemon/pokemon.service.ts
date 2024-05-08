@@ -5,16 +5,30 @@ import { Model, isValidObjectId } from 'mongoose';
 import { Pokemon } from './entities/pokemon.entity';
 import { InjectModel } from '@nestjs/mongoose';  //creado por Nest para manejar mongoose
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PokemonService {
 
+  //propiedades
+  private defaultLimit: number;  //nos creamos esta propiedad para usar las variables de entorno 
+  
+  
   constructor(
     //inyectamos una dependencia de moongose, Model donde hacemos referencia a la entity pokemon
     //Pokemon.name es el nombre del modelo que queremos usar
     @InjectModel(Pokemon.name) 
     private readonly pokemonModel: Model<Pokemon>,
-  ){}
+
+    //injectamos ConfigService de Nest para manejar las variables de entorno
+    private readonly configService: ConfigService,
+  ){
+
+    //usamos el configService, las variables de entorno por defecto son Strings, ahora permite numbers que es lo que necesitamos
+    //usamos el validador de las varaibles de entorno en src/config
+    //la variable defaultLimit la hemos definido arriba en las propiedades, por defecto ponemos un numero para mostrar los pokemons por página
+    this.defaultLimit = configService.get<number>('defaultlLimit');    //defaultLimit entre comillado viene del archivo config/env.config.ts si no viene configurado en .env el valor sera 7
+  }
 
   async create(createPokemonDto: CreatePokemonDto) {
     createPokemonDto.name = createPokemonDto.name.toLocaleLowerCase(); //lo ponemos en minusculas
@@ -40,8 +54,8 @@ export class PokemonService {
 
     //desestructuramos  las propiedades de paginationDto 
     //que contienen los query parameters como son opcionales
-    //si no vienen por defecto ponemos el limit en 10 y offset en 0
-    const { limit = 10, offset = 0} = paginationDto;
+    //si no vienen por defecto ponemos el limit usando la variable creada arriba defaulLimit y offset en 0
+    const { limit = this.defaultLimit, offset = 0} = paginationDto;
 
     return this.pokemonModel.find()
         .limit( limit ) //metodo de Find para poner el limite de los pokemons a mostrar, paginacion

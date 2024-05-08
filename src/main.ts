@@ -27,6 +27,6 @@ async function bootstrap() {
   );
   
   //puerto por donde escuha la app
-  await app.listen(3000);
+  await app.listen( process.env.PORT ); //usamos la variable de entorno de .env
 }
 bootstrap();
