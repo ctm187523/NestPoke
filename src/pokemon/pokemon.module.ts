@@ -9,7 +9,7 @@ import { ConfigModule } from '@nestjs/config';
   controllers: [PokemonController],
   providers: [PokemonService],
   imports: [
-    ConfigModule ,  //importamos ConfigModule usado en pokemon.service.ts
+    ConfigModule ,  //importamos ConfigModule usado en pokemon.service.ts, usado para cargar las variables de entorno, configuracion, importado de app.module.ts ver video ConfigurationService seccion 9
     
     //importamos el modulo para que moongose  pueda trabajar con nuestras entidades
     //para conectar la entidad creada en entities/pokemon.entity.ts
@@ -17,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     MongooseModule.forFeature([
       //definimos los modelos y entidades que tengamos creadas
       {
-        name: Pokemon.name, //Pokemon.name, el name viene de la extension de Document de la clase no es la propiedad name de la entidad
+        name: Pokemon.name, //Pokemon.name, el name viene de la extension de Document de la clase no es la propiedad name de la entidad, viene de Pokemon.entity.ts
         schema: PokemonSchema, //PokemonSchema es el esquema creado al final en pokemon.entity.ts
       }
     ])

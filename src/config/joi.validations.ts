@@ -1,6 +1,6 @@
 
 //hemos instalado el paquete joi --> yarn add joi
-//para validaciones, como usamos este paquete no usaremos el archivo
+//para validaciones, como usamos este paquete no usaremos el archivo, podemos usar los dos
 //de este directorio que habiamos creado para las validaciones --> env.config.ts
 
 import * as Joi from 'joi';

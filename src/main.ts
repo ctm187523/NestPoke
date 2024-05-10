@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 
+
+//para desplegar en la nube ver modificaciones explicadas en video desplegar aplicación en la nube de la sección 9
 async function bootstrap() {
 
   //en la variable app tenemos la aplicación de Nest
