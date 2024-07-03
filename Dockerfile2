@@ -1,0 +1,34 @@
+#Instala la imagen alpine es una version ligera de Linux solo pesa unos 5 y 6 Megas 
+#Tiene solo lo necesario para funcionar y ya viene con Node preinstalado, crea un usuario de node root
+#que nos permite hacer las instalaciones,etc
+FROM node:18-alpine3.15  
+
+# Set working directory, para no poner el path en todos los comandos a ejecutar
+#creamos una carpeta en el sistema operativo alpine en el path especificado
+RUN mkdir -p /var/www/pokedex
+#establecemos que el working directory sera el creado anteriormente
+WORKDIR /var/www/pokedex
+# Copiar el directorio y su contenido
+
+#no haria falta poner el path ya que hemos creado el working directory pero esta puesto para que se vea mas claro
+#con el punto ponemos el directorio origen es decir donde esta el Dockerfile copia todos los directorios que estan a su nivel y no estan incluidos en el .dockerignore, al working directory creado 
+COPY . ./var/www/pokedex
+#copiamos el package.json tsconfig.json tsconfig.build.json en el mismo direcrtorio Working directory
+COPY package.json tsconfig.json tsconfig.build.json /var/www/pokedex/
+#instalamos todas las dependencias que sean de produccion
+RUN yarn install --prod
+#hacemos el build definido en el package.jsonpackage.json tsconfig.json tsconfig.build.json
+RUN yarn build
+# Dar permiso para ejecutar la applicación, creamos un nuevo usuario(llamado pokeuser) para no usar el que esta por defecto
+RUN adduser --disabled-password pokeuser
+#le damos acceso al usuario creado, solo tiene permisos para este directorio creado
+RUN chown -R pokeuser:pokeuser /var/www/pokedex
+#usamos el usuario creado
+USER pokeuser
+# Limpiar el caché, para evitar paquetes o cosas que no son necesarias en cache
+RUN yarn cache clean --force
+
+#exponemos el puerto 3000
+EXPOSE 3000
+#ejecuta en consola el yarn start para que empiece a correr el servidor de Nest, en el pachage.json podemos ver que el start lo que hace es node dist/main, donde esta el main.js
+CMD [ "yarn","start" ]

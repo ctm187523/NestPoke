@@ -1,0 +1,43 @@
+version: '3'
+
+#creamos un nuevo servicio ademas de la base de datos creada abajo db
+#usamos el gist --> https://cursos.devtalles.com/courses/take/nest/lessons/37007632-bonus-construir-la-imagen
+#donde estan los comandos para construir la imagen usamos -> docker-compose -f docker-compose.prod.yaml --env-file .env.prod up --build
+#donde hace referencia a este archivo y usa las variable de produccion .env.prod creadas
+#si ya se hizo el comando anterior para construir la imagen ahora el comando a usar es --> docker-compose -f docker-compose.prod.yaml --env-file .env.prod up
+#para levantar el servicio, el anterior comando sirve si incluso hemos borrado los containers en el docker desktop
+services:
+  pokedexapp:
+    depends_on:
+        - db
+    build: 
+      #el contexto es donde nos encontramos .
+      context: .
+      #usamos el archivo que hemos creado dockerfile en este mismo directorio
+      dockerfile: Dockerfile
+    #indicamos como se llamara la imagen que vamos a crear
+    image: pokedex-docker
+    #nombre que damos al contenedor
+    container_name: pokedexapp
+    restart: always # reiniciar el contenedor si se detiene
+    #usa el del archivo .env
+    ports:
+          - "${PORT}:${PORT}"
+    # working_dir: /var/www/pokedex
+    #usa el del archivo .env
+    environment:
+      MONGODB: ${MONGODB}
+      PORT: ${PORT}
+      DEFAULT_LIMIT: ${DEFAULT_LIMIT}
+    # volumes:
+    #   - ./:/var/www/pokedex
+  db:
+    image: mongo:5
+    container_name: mongo-poke
+    restart: always
+    ports:
+          - 27017:27017
+    environment:
+      MONGODB_DATABASE: nest-pokemon
+    volumes:          #creamos un volumen para que la base de datos sea persistente
+      - ./mongo:/data/db    #se crea un carpeta llamada mongo en el proyecto enlazada con la imagen que estamos montando en el contenedor
