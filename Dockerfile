@@ -1,7 +1,7 @@
 # El archivo Dockerfile2 es el que se hizo de un inicio y se modifico por este lo dejo para ver como se construyo cambiando el nombre a dockerfile1
 # Cada vez que ponemos un Frond seria crear una imagen limpia, imagenes con diferentes funciones dependecies, builder y runner
 # Install dependencies only when needed
-FROM node:18-alpine3.18 AS deps
+FROM node:18-alpine3.17 AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
